@@ -2,10 +2,27 @@ import { useState } from 'react';
 import Button from '../ui/Button';
 import { getCompanyName, setCompanyName } from '../../utils/storage';
 
-export default function Header({ view, onNewPlan, onShowSaved, onPrint }) {
+export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare }) {
   const [editing, setEditing] = useState(false);
   const [company, setCompany] = useState(getCompanyName);
   const [draft, setDraft] = useState('');
+  const [shareState, setShareState] = useState('idle'); // idle | busy | copied
+
+  const handleShare = async () => {
+    if (shareState === 'busy') return;
+    setShareState('busy');
+    try {
+      await onShare();
+    } catch (err) {
+      if (err?.message === 'copied') {
+        setShareState('copied');
+        setTimeout(() => setShareState('idle'), 2500);
+        return;
+      }
+      // AbortError = user cancelled share sheet — not a real error
+    }
+    setShareState('idle');
+  };
 
   const startEdit = () => {
     setDraft(company);
@@ -50,6 +67,16 @@ export default function Header({ view, onNewPlan, onShowSaved, onPrint }) {
           <div className="flex gap-2 shrink-0">
             <Button variant="secondary" onClick={onPrint} className="text-xs px-3 py-1.5">
               🖨 Print
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleShare}
+              disabled={shareState === 'busy'}
+              className="text-xs px-3 py-1.5"
+            >
+              {shareState === 'busy'   ? '⏳ …'      :
+               shareState === 'copied' ? '✓ Copied!'  :
+               '📤 Share'}
             </Button>
           </div>
         </div>
