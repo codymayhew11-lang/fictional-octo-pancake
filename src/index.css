@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Print styles ──────────────────────────────── */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    font-size: 11pt;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Remove shadows and backgrounds for a clean print */
+  input,
+  textarea,
+  select {
+    border: 1px solid #666 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Prevent section splits across pages */
+  .plan-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Remove card shadows */
+  .shadow-sm,
+  .shadow-md {
+    box-shadow: none !important;
+  }
+
+  /* Force readable text */
+  .text-gray-400,
+  .text-gray-500 {
+    color: #444 !important;
+  }
+
+  /* Section headers print cleanly */
+  h2 {
+    color: #000 !important;
+    border-color: #000 !important;
+  }
+}

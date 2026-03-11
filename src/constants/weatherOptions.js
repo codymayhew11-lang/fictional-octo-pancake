@@ -1,0 +1,15 @@
+export const WEATHER_OPTIONS = [
+  '',
+  'Sunny',
+  'Partly Cloudy',
+  'Cloudy',
+  'Overcast',
+  'Light Rain',
+  'Rain',
+  'Heavy Rain',
+  'Thunderstorms',
+  'Fog',
+  'Windy',
+  'Snow',
+  'Icy',
+];
