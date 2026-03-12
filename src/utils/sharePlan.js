@@ -101,3 +101,8 @@ export async function sharePlan(plan) {
   await navigator.clipboard.writeText(text);
   throw new Error('copied');  // signal to caller to show "Copied!" toast
 }
+
+export async function downloadPlan(plan) {
+  const doc = await generatePlanPdf(plan);
+  doc.save(planFileName(plan));
+}

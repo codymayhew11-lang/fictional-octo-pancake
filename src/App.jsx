@@ -4,7 +4,7 @@ import PrintHeader from './components/layout/PrintHeader';
 import PlanForm from './components/PlanForm/PlanForm';
 import PlansList from './components/PlansList/PlansList';
 import { usePlan } from './hooks/usePlan';
-import { sharePlan } from './utils/sharePlan';
+import { sharePlan, downloadPlan } from './utils/sharePlan';
 
 export default function App() {
   const [view, setView] = useState('form');
@@ -28,6 +28,7 @@ export default function App() {
         onShowSaved={() => setView('list')}
         onPrint={() => window.print()}
         onShare={() => sharePlan(plan)}
+        onDownload={() => downloadPlan(plan)}
       />
       <main>
         <PrintHeader date={plan.date} />

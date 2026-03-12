@@ -2,11 +2,12 @@ import { useState } from 'react';
 import Button from '../ui/Button';
 import { getCompanyName, setCompanyName } from '../../utils/storage';
 
-export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare }) {
+export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare, onDownload }) {
   const [editing, setEditing] = useState(false);
   const [company, setCompany] = useState(getCompanyName);
   const [draft, setDraft] = useState('');
-  const [shareState, setShareState] = useState('idle'); // idle | busy | copied
+  const [shareState, setShareState] = useState('idle');     // idle | busy | copied
+  const [downloadState, setDownloadState] = useState('idle'); // idle | busy
 
   const handleShare = async () => {
     if (shareState === 'busy') return;
@@ -22,6 +23,17 @@ export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare 
       // AbortError = user cancelled share sheet — not a real error
     }
     setShareState('idle');
+  };
+
+  const handleDownload = async () => {
+    if (downloadState === 'busy') return;
+    setDownloadState('busy');
+    try {
+      await onDownload();
+    } catch (err) {
+      console.error('Download failed:', err);
+    }
+    setDownloadState('idle');
   };
 
   const startEdit = () => {
@@ -64,9 +76,17 @@ export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare 
             )}
             <h1 className="text-xl font-extrabold tracking-tight leading-tight">Plan of the Day</h1>
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex gap-2 shrink-0 flex-wrap justify-end">
             <Button variant="secondary" onClick={onPrint} className="text-xs px-3 py-1.5">
               🖨 Print
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleDownload}
+              disabled={downloadState === 'busy'}
+              className="text-xs px-3 py-1.5"
+            >
+              {downloadState === 'busy' ? '⏳ …' : '⬇ PDF'}
             </Button>
             <Button
               variant="secondary"
@@ -74,8 +94,8 @@ export default function Header({ view, onNewPlan, onShowSaved, onPrint, onShare 
               disabled={shareState === 'busy'}
               className="text-xs px-3 py-1.5"
             >
-              {shareState === 'busy'   ? '⏳ …'      :
-               shareState === 'copied' ? '✓ Copied!'  :
+              {shareState === 'busy'    ? '⏳ …'     :
+               shareState === 'copied'  ? '✓ Copied!' :
                '📤 Share'}
             </Button>
           </div>
