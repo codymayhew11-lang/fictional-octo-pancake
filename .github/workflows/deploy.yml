@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, "claude/construction-plan-app-w034v"]
   workflow_dispatch:
 
 permissions:
