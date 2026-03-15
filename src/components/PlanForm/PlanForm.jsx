@@ -6,6 +6,7 @@ import WorkSection from './WorkSection';
 import ListSection from './ListSection';
 import NotesSection from './NotesSection';
 import ScanNotesSection from './ScanNotesSection';
+import DocumentIntelligenceSection from './DocumentIntelligenceSection';
 import Button from '../ui/Button';
 import { savePlan } from '../../utils/storage';
 import { formatTime } from '../../utils/dateHelpers';
@@ -57,6 +58,9 @@ export default function PlanForm({ plan, setField, workPerformed, workPlanned, e
         placeholder="e.g. J. Smith — Journeyman Lineman"
       />
       <ScanNotesSection
+        onAppendToNotes={(text) => setField('notes', plan.notes ? plan.notes + '\n\n' + text : text)}
+      />
+      <DocumentIntelligenceSection
         onAppendToNotes={(text) => setField('notes', plan.notes ? plan.notes + '\n\n' + text : text)}
       />
       <NotesSection outOfScope={plan.outOfScope} notes={plan.notes} setField={setField} />
